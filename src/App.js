@@ -16,7 +16,7 @@ function App() {
     localStorage.setItem("colors", JSON.stringify(colorList));
   }, [colorList]);
 
-  const handleChangeName = (event) => {
+  const handleChangeColorName = (event) => {
     setColorName(event.target.value);
   };
 
@@ -25,8 +25,12 @@ function App() {
   };
 
   const handleAddColor = () => {
-    if (colorName && color) {
-      setColorList([...colorList, { name: colorName, color: color }]);
+    if (color) {
+      const newColor = {
+        name: colorName,
+        color: color,
+      };
+      setColorList([...colorList, newColor]);
       setColorName("");
       setColor("");
     }
@@ -47,35 +51,42 @@ function App() {
         <div className="card-body">
           <div className="row">
             <div className="col-md-4">
+              <h5>Elegí tu color</h5>
               <div
                 className="color-picker"
                 style={{ backgroundColor: color }}
               ></div>
-              <input
-                type="text"
-                className="form-control mt-3"
-                placeholder="Ingrese un nombre"
-                value={colorName}
-                onChange={handleChangeName}
-              />
               <input
                 type="color"
                 className="form-control mt-3"
                 value={color}
                 onChange={handleChangeColor}
               />
-              <button className="btn btn-primary mt-3" onClick={handleAddColor}>
-                Guardar
-              </button>
+              <div className="mt-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Ingrese un nombre"
+                  value={colorName}
+                  onChange={handleChangeColorName}
+                />
+                <button
+                  className="btn btn-primary mt-2"
+                  onClick={handleAddColor}
+                  disabled={!color}
+                >
+                  Guardar
+                </button>
+              </div>
             </div>
             <div className="col-md-8">
               {colorList.map((color, index) => (
-                <div className="card mb-3" key={index}>
-                  <div className="card-header">{color.name}</div>
+                <div className="color-item" key={index}>
                   <div
-                    className="card-body"
+                    className="color-box"
                     style={{ backgroundColor: color.color }}
                   ></div>
+                  <div className="color-name">{color.name}</div>
                   <button
                     className="btn btn-danger"
                     onClick={() => handleDeleteColor(index)}
